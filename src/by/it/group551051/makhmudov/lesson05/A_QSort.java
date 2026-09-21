@@ -66,12 +66,110 @@ public class A_QSort {
         for (int i = 0; i < m; i++) {
             points[i] = scanner.nextInt();
         }
-        //тут реализуйте логику задачи с применением быстрой сортировки
-        //в классе отрезка Segment реализуйте нужный для этой задачи компаратор
-
+        quickSort(segments, 0, n - 1);
+        int[] starts = new int[n];
+        int[] ends = new int[n];
+        for (int i = 0; i < n; i++) {
+            starts[i] = segments[i].start;
+            ends[i] = segments[i].stop;
+        }
+        quickSort(starts, 0, n - 1);
+        quickSort(ends, 0, n - 1);
+        for (int i = 0; i < m; i++) {
+            int point = points[i];
+            result[i] = countLessOrEqual(starts, point) - countLess(ends, point);
+        }
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
+    }
+
+    private void quickSort(Segment[] arr, int left, int right) {
+        if (left >= right) {
+            return;
+        }
+        int i = left;
+        int j = right;
+        Segment pivot = arr[left + (right - left) / 2];
+        while (i <= j) {
+            while (arr[i].compareTo(pivot) < 0) {
+                i++;
+            }
+            while (arr[j].compareTo(pivot) > 0) {
+                j--;
+            }
+            if (i <= j) {
+                Segment tmp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = tmp;
+                i++;
+                j--;
+            }
+        }
+        if (left < j) {
+            quickSort(arr, left, j);
+        }
+        if (i < right) {
+            quickSort(arr, i, right);
+        }
+    }
+
+    private void quickSort(int[] arr, int left, int right) {
+        if (left >= right) {
+            return;
+        }
+        int i = left;
+        int j = right;
+        int pivot = arr[left + (right - left) / 2];
+        while (i <= j) {
+            while (arr[i] < pivot) {
+                i++;
+            }
+            while (arr[j] > pivot) {
+                j--;
+            }
+            if (i <= j) {
+                int tmp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = tmp;
+                i++;
+                j--;
+            }
+        }
+        if (left < j) {
+            quickSort(arr, left, j);
+        }
+        if (i < right) {
+            quickSort(arr, i, right);
+        }
+    }
+
+    private int countLessOrEqual(int[] arr, int value) {
+        int left = 0;
+        int right = arr.length;
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (arr[mid] <= value) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+        return left;
+    }
+
+    private int countLess(int[] arr, int value) {
+        int left = 0;
+        int right = arr.length;
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (arr[mid] < value) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+        return left;
     }
 
     //отрезок
@@ -80,17 +178,21 @@ public class A_QSort {
         int stop;
 
         Segment(int start, int stop) {
-            this.start = start;
-            this.stop = stop;
-            //тут вообще-то лучше доделать конструктор на случай если
-            //концы отрезков придут в обратном порядке
+            if (start > stop) {
+                this.start = stop;
+                this.stop = start;
+            } else {
+                this.start = start;
+                this.stop = stop;
+            }
         }
 
         @Override
         public int compareTo(Segment o) {
-            //подумайте, что должен возвращать компаратор отрезков
-
-            return 0;
+            if (start != o.start) {
+                return Integer.compare(start, o.start);
+            }
+            return Integer.compare(stop, o.stop);
         }
     }
 
