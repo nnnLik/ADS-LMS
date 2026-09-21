@@ -54,11 +54,42 @@ public class C_GetInversions {
         for (int i = 0; i < n; i++) {
             a[i] = scanner.nextInt();
         }
-        int result = 0;
-        //!!!!!!!!!!!!!!!!!!!!!!!!     тут ваше решение   !!!!!!!!!!!!!!!!!!!!!!!!
-
-
+        int result = countInversions(a, 0, n - 1);
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
+    }
+
+    private int countInversions(int[] a, int left, int right) {
+        if (left >= right) {
+            return 0;
+        }
+        int mid = left + (right - left) / 2;
+        int inv = countInversions(a, left, mid) + countInversions(a, mid + 1, right);
+        inv += mergeCount(a, left, mid, right);
+        return inv;
+    }
+
+    private int mergeCount(int[] a, int left, int mid, int right) {
+        int[] buffer = new int[right - left + 1];
+        int i = left;
+        int j = mid + 1;
+        int k = 0;
+        int inv = 0;
+        while (i <= mid && j <= right) {
+            if (a[i] <= a[j]) {
+                buffer[k++] = a[i++];
+            } else {
+                buffer[k++] = a[j++];
+                inv += mid - i + 1;
+            }
+        }
+        while (i <= mid) {
+            buffer[k++] = a[i++];
+        }
+        while (j <= right) {
+            buffer[k++] = a[j++];
+        }
+        System.arraycopy(buffer, 0, a, left, buffer.length);
+        return inv;
     }
 }

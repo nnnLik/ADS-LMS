@@ -42,15 +42,42 @@ public class B_MergeSort {
         int[] a = new int[n];
         for (int i = 0; i < n; i++) {
             a[i] = scanner.nextInt();
-            System.out.println(a[i]);
         }
 
-        // тут ваше решение (реализуйте сортировку слиянием)
-        // https://ru.wikipedia.org/wiki/Сортировка_слиянием
-
-
+        mergeSort(a, 0, n - 1);
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return a;
+    }
+
+    private void mergeSort(int[] a, int left, int right) {
+        if (left >= right) {
+            return;
+        }
+        int mid = left + (right - left) / 2;
+        mergeSort(a, left, mid);
+        mergeSort(a, mid + 1, right);
+        merge(a, left, mid, right);
+    }
+
+    private void merge(int[] a, int left, int mid, int right) {
+        int[] buffer = new int[right - left + 1];
+        int i = left;
+        int j = mid + 1;
+        int k = 0;
+        while (i <= mid && j <= right) {
+            if (a[i] <= a[j]) {
+                buffer[k++] = a[i++];
+            } else {
+                buffer[k++] = a[j++];
+            }
+        }
+        while (i <= mid) {
+            buffer[k++] = a[i++];
+        }
+        while (j <= right) {
+            buffer[k++] = a[j++];
+        }
+        System.arraycopy(buffer, 0, a, left, buffer.length);
     }
 
 
