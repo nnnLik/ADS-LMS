@@ -42,10 +42,29 @@ public class A_EditDist {
     int getDistanceEdinting(String one, String two) {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
 
-
-        int result = 0;
+        return editDistance(one, two, one.length(), two.length());
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+    }
+
+    private int editDistance(String one, String two, int i, int j) {
+        if (i == 0) {
+            return j;
+        }
+        if (j == 0) {
+            return i;
+        }
+        if (one.charAt(i - 1) == two.charAt(j - 1)) {
+            return editDistance(one, two, i - 1, j - 1);
+        }
+        return 1 + min(
+                editDistance(one, two, i - 1, j),
+                editDistance(one, two, i, j - 1),
+                editDistance(one, two, i - 1, j - 1)
+        );
+    }
+
+    private static int min(int a, int b, int c) {
+        return Math.min(Math.min(a, b), c);
     }
 
 

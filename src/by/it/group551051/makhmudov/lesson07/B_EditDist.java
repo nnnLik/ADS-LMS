@@ -42,10 +42,29 @@ public class B_EditDist {
     int getDistanceEdinting(String one, String two) {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
 
+        int n = one.length();
+        int m = two.length();
+        int[] prev = new int[m + 1];
+        int[] curr = new int[m + 1];
 
-        int result = 0;
+        for (int j = 0; j <= m; j++) {
+            curr[j] = j;
+        }
+
+        for (int i = 1; i <= n; i++) {
+            System.arraycopy(curr, 0, prev, 0, m + 1);
+            curr[0] = i;
+            for (int j = 1; j <= m; j++) {
+                int cost = one.charAt(i - 1) == two.charAt(j - 1) ? 0 : 1;
+                curr[j] = min(prev[j] + 1, curr[j - 1] + 1, prev[j - 1] + cost);
+            }
+        }
+        return curr[m];
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+    }
+
+    private static int min(int a, int b, int c) {
+        return Math.min(Math.min(a, b), c);
     }
 
 
