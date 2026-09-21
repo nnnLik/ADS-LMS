@@ -74,25 +74,63 @@ public class C_HeapMax {
         //Будет мало? Ну тогда можете его собрать как Generic и/или использовать в варианте B
         private List<Long> heap = new ArrayList<>();
 
-        int siftDown(int i) { //просеивание вверх
+        private void swap(int i, int j) {
+            Long tmp = heap.get(i);
+            heap.set(i, heap.get(j));
+            heap.set(j, tmp);
+        }
 
+        int siftDown(int i) {
+            int size = heap.size();
+            while (true) {
+                int left = 2 * i + 1;
+                int right = 2 * i + 2;
+                int largest = i;
+                if (left < size && heap.get(left) > heap.get(largest)) {
+                    largest = left;
+                }
+                if (right < size && heap.get(right) > heap.get(largest)) {
+                    largest = right;
+                }
+                if (largest == i) {
+                    break;
+                }
+                swap(i, largest);
+                i = largest;
+            }
             return i;
         }
 
-        int siftUp(int i) { //просеивание вниз
-
+        int siftUp(int i) {
+            while (i > 0) {
+                int parent = (i - 1) / 2;
+                if (heap.get(parent) >= heap.get(i)) {
+                    break;
+                }
+                swap(parent, i);
+                i = parent;
+            }
             return i;
         }
 
-        void insert(Long value) { //вставка
+        void insert(Long value) {
+            heap.add(value);
+            siftUp(heap.size() - 1);
         }
 
-        Long extractMax() { //извлечение и удаление максимума
-            Long result = null;
-
-            return result;
-        }
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! КОНЕЦ ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+        Long extractMax() {
+            if (heap.isEmpty()) {
+                return null;
+            }
+            Long max = heap.get(0);
+            int lastIndex = heap.size() - 1;
+            heap.set(0, heap.get(lastIndex));
+            heap.remove(lastIndex);
+            if (!heap.isEmpty()) {
+                siftDown(0);
+            }
+            return max;
+        }        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! КОНЕЦ ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
     }
 
     // РЕМАРКА. Это задание исключительно учебное.
