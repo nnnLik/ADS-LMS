@@ -39,7 +39,22 @@ public class B_Knapsack {
         }
 
 
-        int result = 0;
+        boolean[] dp = new boolean[w + 1];
+        dp[0] = true;
+        for (int weight : gold) {
+            if (weight == 0) {
+                continue;
+            }
+            for (int i = w; i >= weight; i--) {
+                if (dp[i - weight]) {
+                    dp[i] = true;
+                }
+            }
+        }
+        int result = w;
+        while (result > 0 && !dp[result]) {
+            result--;
+        }
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }

@@ -1,7 +1,5 @@
 package by.it.group551051.makhmudov.lesson08;
 
-import by.it.group551051.makhmudov.lesson07.A_EditDist;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -49,7 +47,22 @@ public class A_Knapsack {
         }
 
 
-        int result = 0;
+        boolean[] dp = new boolean[w + 1];
+        dp[0] = true;
+        for (int weight : gold) {
+            if (weight == 0) {
+                continue;
+            }
+            for (int i = weight; i <= w; i++) {
+                if (dp[i - weight]) {
+                    dp[i] = true;
+                }
+            }
+        }
+        int result = w;
+        while (result > 0 && !dp[result]) {
+            result--;
+        }
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }
